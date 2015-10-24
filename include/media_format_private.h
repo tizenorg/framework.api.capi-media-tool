@@ -53,61 +53,61 @@ extern "C" {
 
 /**
  * @brief Check whether given media format is for audio or not
- * @since_tizen @if MOBILE 2.3 @elseif WEARABLE 2.3.1 @endif
+ * @since_tizen 2.3
  */
 #define MEDIA_FORMAT_IS_AUDIO(x_fmt) (MEDIA_FORMAT_CAST(x_fmt)->mimetype & MEDIA_FORMAT_AUDIO)
 
 /**
  * @brief Check whether given media format is for video or not
- * @since_tizen @if MOBILE 2.3 @elseif WEARABLE 2.3.1 @endif
+ * @since_tizen 2.3
  */
 #define MEDIA_FORMAT_IS_VIDEO(x_fmt) (MEDIA_FORMAT_CAST(x_fmt)->mimetype & MEDIA_FORMAT_VIDEO)
 
 /**
  * @brief Check whether given media format is for text or not
- * @since_tizen @if MOBILE 2.3 @elseif WEARABLE 2.3.1 @endif
+ * @since_tizen 2.3
  */
 #define MEDIA_FORMAT_IS_TEXT(x_fmt) (false)
 
 /**
  * @brief Check whether given media format is for raw type or not
- * @since_tizen @if MOBILE 2.3 @elseif WEARABLE 2.3.1 @endif
+ * @since_tizen 2.3
  */
 #define MEDIA_FORMAT_IS_RAW(x_fmt) (MEDIA_FORMAT_CAST(x_fmt)->mimetype & MEDIA_FORMAT_RAW)
 
 /**
  * @brief Check whether given media format is for encoded type or not
- * @since_tizen @if MOBILE 2.3 @elseif WEARABLE 2.3.1 @endif
+ * @since_tizen 2.3
  */
 #define MEDIA_FORMAT_IS_ENCODED(x_fmt) (MEDIA_FORMAT_CAST(x_fmt)->mimetype & MEDIA_FORMAT_ENCODED)
 
 /**
  * @brief Gets the number of media format ref_count
- * @since_tizen @if MOBILE 2.3 @elseif WEARABLE 2.3.1 @endif
+ * @since_tizen 2.3
  */
 #define MEDIA_FORMAT_GET_REFCOUNT(x_fmt) (g_atomic_int_get(&(MEDIA_FORMAT_CAST(x_fmt))->ref_count))
 
 /**
  * @brief Check whether given media format is writable or not
- * @since_tizen @if MOBILE 2.3 @elseif WEARABLE 2.3.1 @endif
+ * @since_tizen 2.3
  */
 #define MEDIA_FORMAT_IS_WRITABLE(x_fmt) (MEDIA_FORMAT_GET_REFCOUNT(x_fmt) == 1)
 
 /**
  * @brief increase the media format's ref_count
- * @since_tizen @if MOBILE 2.3 @elseif WEARABLE 2.3.1 @endif
+ * @since_tizen 2.3
  */
 #define MEDIA_FORMAT_INC_REFCOUNT(x_fmt) (g_atomic_int_inc(&(MEDIA_FORMAT_CAST(x_fmt))->ref_count))
 
 /**
  * @brief decrease the media format's ref_count and return true if ref_count become zero.
- * @since_tizen @if MOBILE 2.3 @elseif WEARABLE 2.3.1 @endif
+ * @since_tizen 2.3
  */
 #define MEDIA_FORMAT_DEC_REFCOUNT_TEST(x_fmt) (g_atomic_int_dec_and_test(&(MEDIA_FORMAT_CAST(x_fmt))->ref_count))
 
 /**
  * @brief Media format for configuring video codec.
- * @since_tizen @if MOBILE 2.3 @elseif WEARABLE 2.3.1 @endif
+ * @since_tizen 2.3
  */
 typedef struct _media_format_video_spec_s {
     int width;          /**< media format video width */
@@ -118,18 +118,19 @@ typedef struct _media_format_video_spec_s {
 
 /**
  * @brief Media format for configuring audio codec.
- * @since_tizen @if MOBILE 2.3 @elseif WEARABLE 2.3.1 @endif
+ * @since_tizen 2.3
  */
 typedef struct _media_fomat_audio_spec_s {
     int channel;          /**< media format audio's the number of channels */
     int samplerate;          /**< media format audio sampling rate */
     int bit;                /**< media format audio's the bit resolution */
     int avg_bps;          /**< media format audio max bps */
+    bool is_adts;          /**< media format audio aac adts flag */
 } media_format_audio_spec_s;
 
 /**
  * @brief Structure of media format.
- * @since_tizen @if MOBILE 2.3 @elseif WEARABLE 2.3.1 @endif
+ * @since_tizen 2.3
  */
 typedef struct _media_format_s
 {

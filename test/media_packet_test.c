@@ -20,7 +20,7 @@
 #include <media_packet_private.h>
 #include <media_format.h>
 #include <media_format_private.h>
-
+#include <media_packet_internal.h>
 
 #include <appcore-efl.h>
 
@@ -45,6 +45,7 @@ enum
     CURRENT_STATUS_FORMAT_SET_AUDIO_SAMPLERATE,
     CURRENT_STATUS_FORMAT_SET_AUDIO_BIT,
     CURRENT_STATUS_FORMAT_SET_AUDIO_AVG_BPS,
+    CURRENT_STATUS_FORMAT_SET_AUDIO_AAC_TYPE,
 };
 
 
@@ -56,6 +57,11 @@ static media_packet_h g_media_packet[MAX_HANDLE] = {0};
 int media_format_idx = -1;
 bool is_only_created_handle;
 bool is_excute_create;
+
+unsigned char codec_data[0x04] = {0x00, 0x01, 0x02, 0x03};
+unsigned int codec_data_size = 4;
+unsigned char* codec_data_ptr = codec_data;
+
 
 /***********************************************/
 /***  Test API part
@@ -230,6 +236,17 @@ static void _media_format_set_audio_avg_bps(int avg_bps)
         g_print("media_format_set_audio_avg_bps is succeeded!!\n");
     else
         g_print("media_format_set_audio_avg_bps is failed...!!\n");
+}
+
+static void _media_format_set_audio_aac_type(bool is_adts)
+{
+    int ret;
+    ret = media_format_set_audio_aac_type(g_media_format[media_format_idx], is_adts);
+
+    if (ret == MEDIA_FORMAT_ERROR_NONE)
+        g_print("media_format_set_audio_aac_type is succeeded!!\n");
+    else
+        g_print("media_format_set_audio_aac_type is failed...!!\n");
 }
 
 static void _create_format_320_240_es(void)
@@ -538,7 +555,7 @@ static void _media_packet_get_buffer_size(void)
     if (media_packet_get_buffer_size(g_media_packet[0],&size) == MEDIA_PACKET_ERROR_NONE)
     {
         g_print("media_packet_get_buffer_size is sucess!!");
-        g_print("\t\t[media_packet]===> size = %llu", size);
+        g_print("\t\t[media_packet]===> size = %llu\n", size);
     }
     else
     {
@@ -553,7 +570,7 @@ static void _media_packet_get_duration(void)
     if (media_packet_get_duration(g_media_packet[0], &duration) == MEDIA_PACKET_ERROR_NONE)
     {
         g_print("media_packet_get_duration is sucess!!");
-        g_print("\t\t[media_packet]===> duration = %llu", duration);
+        g_print("\t\t[media_packet]===> duration = %llu\n", duration);
     }
     else
     {
@@ -575,7 +592,7 @@ static void _media_packet_get_buffer_data_ptr(void)
     if (media_packet_get_buffer_data_ptr(g_media_packet[0], &ptr) == MEDIA_PACKET_ERROR_NONE)
     {
         g_print("media_packet_get_buffer_data_ptr is sucess!!");
-        g_print("\t\t[media_packet]===> buffer_data_ptr = %p", ptr);
+        g_print("\t\t[media_packet]===> buffer_data_ptr = %p\n", ptr);
     }
     else
     {
@@ -591,11 +608,109 @@ static void _media_packet_get_tbm_surface()
     if (media_packet_get_tbm_surface(g_media_packet[0], &tbm_surface) == MEDIA_PACKET_ERROR_NONE)
     {
         g_print("media_packet_get_tbm_surface is sucess!!");
-        g_print("\t\t[media_packet]===> tbm_surface = %p", (void*)tbm_surface);
+        g_print("\t\t[media_packet]===> tbm_surface = %p\n", (void*)tbm_surface);
     }
     else
     {
         g_print("media_packet_get_duration is failed...");
+    }
+}
+
+static void _media_packet_get_number_of_video_planes()
+{
+    uint32_t num = 0;
+    if (media_packet_get_number_of_video_planes(g_media_packet[0], &num)== MEDIA_PACKET_ERROR_NONE)
+    {
+        g_print("media_packet_get_number_of_video_planes is sucess!!\n");
+        g_print("\t\t[media_packet]===> number of planes = %ld\n", num);
+
+    }
+    else
+    {
+        g_print("media_packet_get_number_of_video_planes is failed...");
+    }
+}
+
+static void _media_packet_get_video_stride_width()
+{
+    int stride_w;
+    if (media_packet_get_video_stride_width(g_media_packet[0], 0, &stride_w)== MEDIA_PACKET_ERROR_NONE)
+    {
+        g_print("media_packet_get_video_stride_width is sucess!!\n");
+        g_print("\t\t[media_packet]===> stride width = %d\n", stride_w);
+
+    }
+    else
+    {
+        g_print("media_packet_get_video_stride_width is failed...");
+    }
+}
+
+static void _media_packet_get_video_stride_height()
+{
+    int stride_h;
+    if (media_packet_get_video_stride_height(g_media_packet[0], 0, &stride_h)== MEDIA_PACKET_ERROR_NONE)
+    {
+        g_print("media_packet_get_video_stride_height is sucess!!\n");
+        g_print("\t\t[media_packet]===> stride height = %d\n", stride_h);
+
+    }
+    else
+    {
+        g_print("media_packet_get_video_stride_height is failed...");
+    }
+}
+
+static void _media_packet_get_video_plane_data_ptr()
+{
+    void* ptr;
+    if (media_packet_get_video_plane_data_ptr(g_media_packet[0], 0, &ptr)== MEDIA_PACKET_ERROR_NONE)
+    {
+        g_print("media_packet_get_video_plane_data_ptr is sucess!!\n");
+        g_print("\t\t[media_packet]===> ptr = %p\n", ptr);
+
+    }
+    else
+    {
+        g_print("_media_packet_get_plane_data_ptr is failed...");
+    }
+}
+
+static void _media_packet_set_codec_data()
+{
+    if (media_packet_set_codec_data(g_media_packet[0], (void*)codec_data_ptr, codec_data_size) == MEDIA_PACKET_ERROR_NONE)
+    {
+        g_print("media_packet_set_codec_data is sucess..!\n");
+    }
+    else
+    {
+        g_print("media_packet_set_codec_data is failed...\n");
+    }
+}
+
+static void _media_packet_get_codec_data()
+{
+    unsigned char* get_codec_data;
+    unsigned int get_codec_data_size;
+
+    if (media_packet_get_codec_data(g_media_packet[0], &get_codec_data, &get_codec_data_size) == MEDIA_PACKET_ERROR_NONE)
+    {
+        g_print("media_packet_get_codec_data is sucess ... !\n");
+        g_print("codec_data_size = %u\n", get_codec_data_size);
+
+        if (get_codec_data_size == 0)
+            return;
+
+        int i;
+        for (i=0 ; i < get_codec_data_size; i++)
+        {
+            g_print("codec_data[%d] ", i);
+            g_print(" = 0x%x\n", get_codec_data[i]);
+        }
+    }
+    else
+    {
+        g_print("media_packet_get_codec_data is failed...\n");
     }
 }
 
@@ -806,7 +921,7 @@ static void _media_format_get_audio_info(void)
     if (media_format_get_audio_info(g_media_format[0], &mime, &channel, &samplerate, &bit, &avg_bps)== MEDIA_FORMAT_ERROR_NONE)
     {
         g_print("media_format_get_audio_info is sucess!\n");
-        g_print("\t\t[media_format_get_audio_info]mime:0x%x, channel :%d, samplerate :%d, bit: %d, avg_bps:%d \n", mime, channel, samplerate, bit, avg_bps);
+        g_print("\t\t[media_format_get_audio_info]mime:0x%x, channel :%d, samplerate :%d, bit: %d, avg_bps:%d, is_adts:%d \n", mime, channel, samplerate, bit, avg_bps);
         g_print("packet format ref_count: %d", MEDIA_FORMAT_GET_REFCOUNT(g_media_format[0]));
     }
     else
@@ -1032,6 +1147,31 @@ void _interpret_main_menu(char *cmd)
         {
             g_menu_state = CURRENT_STATUS_FORMAT_SET_AUDIO_BIT;
         }
+        else if (strncmp(cmd, "gnp", 3) == 0)
+        {
+            _media_packet_get_number_of_video_planes();
+        }
+        else if (strncmp(cmd, "gsw", 3) == 0)
+        {
+            _media_packet_get_video_stride_width();
+        }
+        else if (strncmp(cmd, "gsh", 3) == 0)
+        {
+            _media_packet_get_video_stride_height();
+        }
+        else if (strncmp(cmd, "gpp", 3) == 0)
+        {
+            _media_packet_get_video_plane_data_ptr();
+        }
+        else if (strncmp(cmd, "scd", 3) == 0)
+        {
+            _media_packet_set_codec_data();
+        }
+        else if (strncmp(cmd, "gcd", 3) == 0)
+        {
+            _media_packet_get_codec_data();
+        }
+
     }
     else if (len == 4)
     {
@@ -1054,6 +1194,10 @@ void _interpret_main_menu(char *cmd)
         else if (strncmp(cmd, "saab", 4) == 0)
         {
             g_menu_state = CURRENT_STATUS_FORMAT_SET_AUDIO_AVG_BPS;
+        }
+        else if (strncmp(cmd, "saat", 4) == 0)
+        {
+            g_menu_state = CURRENT_STATUS_FORMAT_SET_AUDIO_AAC_TYPE;
         }
     }
 
@@ -1121,6 +1265,10 @@ static void displaymenu(void)
     else if (g_menu_state == CURRENT_STATUS_FORMAT_SET_AUDIO_AVG_BPS)
     {
         g_print("input audio average bps:\n");
+    }
+    else if (g_menu_state == CURRENT_STATUS_FORMAT_SET_AUDIO_AAC_TYPE)
+    {
+        g_print("input audio aac type (0 or 1):\n");
     }
     else
     {
@@ -1251,6 +1399,13 @@ static void interpret (char *cmd)
                 reset_menu_state();
             }
             break;
+        case CURRENT_STATUS_FORMAT_SET_AUDIO_AAC_TYPE:
+            {
+                bool is_ats = atoi(cmd);
+                _media_format_set_audio_aac_type(is_ats);
+                reset_menu_state();
+            }
+            break;
         case CURRENT_STATUS_DURATION:
             {
                 uint64_t duration = atoi(cmd);
@@ -1288,6 +1443,7 @@ void display_sub_basic()
     g_print("sas. media_format_set_audio_samplerate\t");
     g_print("sab. media_format_set_audio_bit \t");
     g_print("saab. media_format_set_audio_avg_bps\t");
+    g_print("saat. media_format_set_audio_aac_type\t");
     g_print("\n");
     g_print("fgv. media_format_get_video_info \t");
     g_print("fga. media_format_get_audio_info \t\t");
@@ -1318,6 +1474,13 @@ void display_sub_basic()
     g_print("\n");
     g_print("gs. media_packet_get_buffer_size\t");
     g_print("\n");
+    g_print("gnp. media_packet_get_number_of_video_planes\t");
+    g_print("gsw. media_packet_get_video_stride_width\t");
+    g_print("gsh. media_packet_get_video_stride_height\t");
+    g_print("gpp. media_packet_get_video_plane_data_ptr\t");
+    g_print("\n");
+    g_print("scd. media_packet_set_codec_data\t");
+    g_print("gcd. media_packet_get_codec_data\t");
     g_print("\n");
     g_print("d. media_packet_destroy \n");
     g_print("q. quit test suite(if exist alive media_format, do media_format_unref)");

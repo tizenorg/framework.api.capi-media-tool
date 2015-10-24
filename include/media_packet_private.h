@@ -41,61 +41,61 @@ extern "C" {
 
 /**
  * @brief Gets pts of media_packet_h
- * @since_tizen @if MOBILE 2.3 @elseif WEARABLE 2.3.1 @endif
+ * @since_tizen 2.3
  */
 #define MEDIA_PACKET_PTS(arg) (MEDIA_PACKET_CAST(arg)->pts)
 
 /**
  * @brief Gets dts of media_packet_h
- * @since_tizen @if MOBILE 2.3 @elseif WEARABLE 2.3.1 @endif
+ * @since_tizen 2.3
  */
 #define MEDIA_PACKET_DTS(arg) (MEDIA_PACKET_CAST(arg)->dts)
 
 /**
  * @brief Gets duration of media_packet_h
- * @since_tizen @if MOBILE 2.3 @elseif WEARABLE 2.3.1 @endif
+ * @since_tizen 2.3
  */
 #define MEDIA_PACKET_DURATION(arg) (MEDIA_PACKET_CAST(arg)->duration)
 
 /**
  * @brief Gets size of media_packet_h
- * @since_tizen @if MOBILE 2.3 @elseif WEARABLE 2.3.1 @endif
+ * @since_tizen 2.3
  */
 #define MEDIA_PACKET_SIZE(arg) (MEDIA_PACKET_CAST(arg)->size)
 
 /**
  * @brief Gets data of media_packet_h
- * @since_tizen @if MOBILE 2.3 @elseif WEARABLE 2.3.1 @endif
+ * @since_tizen 2.3
  */
 #define MEDIA_PACKET_DATA(arg) (MEDIA_PACKET_CAST(arg)->data)
 
 /**
  * @brief Gets the buffer flags of media_packet_h
- * @since_tizen @if MOBILE 2.3 @elseif WEARABLE 2.3.1 @endif
+ * @since_tizen 2.3
  */
 #define MEDIA_PACKET_FLAGS(arg) (MEDIA_PACKET_CAST(arg)->flags)
 
 /**
  * @brief Gets the buffer config flag of media_packet_h
- * @since_tizen @if MOBILE 2.3 @elseif WEARABLE 2.3.1 @endif
+ * @since_tizen 2.3
  */
 #define MEDIA_PACKET_CODEC_CONFIG_DATA(arg) (((MEDIA_PACKET_CAST(arg)->flags) >> 0) & 0x001)
 
 /**
  * @brief Gets the buffer eos flag of media_packet_h
- * @since_tizen @if MOBILE 2.3 @elseif WEARABLE 2.3.1 @endif
+ * @since_tizen 2.3
  */
 #define MEDIA_PACKET_CODEC_END_OF_STREAM(arg) (((MEDIA_PACKET_CAST(arg)->flags) >> 1) & 0x001)
 
 /**
  * @brief Gets the buffer sync flag of media_packet_h
- * @since_tizen @if MOBILE 2.3 @elseif WEARABLE 2.3.1 @endif
+ * @since_tizen 2.3
  */
 #define MEDIA_PACKET_CODEC_SYNC_FRAME(arg) (((MEDIA_PACKET_CAST(arg)->flags) >> 2) & 0x001)
 
 /**
  * @brief Casting to media_packet_s
- * @since_tizen @if MOBILE 2.3 @elseif WEARABLE 2.3.1 @endif
+ * @since_tizen 2.3
  */
 #define MEDIA_PACKET_CAST(obj) ((media_packet_s*)(obj))
 
@@ -105,6 +105,7 @@ typedef enum {
     MEDIA_BUFFER_TYPE_EXTERNAL_TBM_SURFACE,
     MEDIA_BUFFER_TYPE_NORMAL,
     MEDIA_BUFFER_TYPE_AUTO,
+    MEDIA_BUFFER_TYPE_EXTERNAL_MEMORY,
     MEDIA_BUFFER_TYPE_MAX
 } media_buffer_type_e;
 
@@ -119,7 +120,9 @@ typedef struct _media_packet_s{
     media_packet_finalize_cb finalizecb_func;
     void* userdata;
     bool is_allocated;
-    void *extradata;
+    void* extradata;
+    void* codec_data;
+    unsigned int codec_data_size;
 
     media_format_s* format;
     media_buffer_type_e type;

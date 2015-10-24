@@ -19,6 +19,7 @@
 
 #include <stdbool.h>
 #include <stdint.h>
+#include <tizen.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -36,14 +37,14 @@ extern "C" {
 
 /**
  * @brief Media Format handle type.
-  * @since_tizen @if MOBILE 2.3 @elseif WEARABLE 2.3.1 @endif
+  * @since_tizen 2.3
  */
 typedef struct media_format_s* media_format_h;
 
 
 /**
  * @brief Enumerations of  media format error
- * @since_tizen @if MOBILE 2.3 @elseif WEARABLE 2.3.1 @endif
+ * @since_tizen 2.3
  */
 typedef enum
 {
@@ -57,7 +58,7 @@ typedef enum
 
 /**
  * @brief Enumeration for media format type.
- * @since_tizen @if MOBILE 2.3 @elseif WEARABLE 2.3.1 @endif
+ * @since_tizen 2.3
  */
 typedef enum {
     MEDIA_FORMAT_NONE    = 0x00000000,          /**< media format type is NONE */
@@ -69,7 +70,7 @@ typedef enum {
 
 /**
  * @brief Enumeration for media format data type.
- * @since_tizen @if MOBILE 2.3 @elseif WEARABLE 2.3.1 @endif
+ * @since_tizen 2.3
  */
 typedef enum {
     MEDIA_FORMAT_ENCODED = 0x10000000,          /**< media format data type is encoded type */
@@ -78,7 +79,7 @@ typedef enum {
 
 /**
  * @brief Enumeration for media format MIME type.
- * @since_tizen @if MOBILE 2.3 @elseif WEARABLE 2.3.1 @endif
+ * @since_tizen 2.3
  */
 
 /* TODO : More an more audio/video types are needed !!!! */
@@ -87,53 +88,70 @@ typedef enum {
 */
 typedef enum {
     /* Audio */
-    MEDIA_FORMAT_L16 = (MEDIA_FORMAT_AUDIO | MEDIA_FORMAT_ENCODED | 0x1010),          /**< media format mime type is L16, AUDIO*/
+    MEDIA_FORMAT_L16 = (MEDIA_FORMAT_AUDIO | MEDIA_FORMAT_ENCODED | 0x1010),           /**< media format mime type is L16, AUDIO*/
     MEDIA_FORMAT_ALAW = (MEDIA_FORMAT_AUDIO | MEDIA_FORMAT_ENCODED | 0x1020),          /**< media format mime type is ALAW, AUDIO*/
     MEDIA_FORMAT_ULAW = (MEDIA_FORMAT_AUDIO | MEDIA_FORMAT_ENCODED | 0x1030),          /**< media format mime type is ULAW,  AUDIO */
-    MEDIA_FORMAT_AMR = (MEDIA_FORMAT_AUDIO | MEDIA_FORMAT_ENCODED | 0x1040),          /**< media format mime type is AMR,  AUDIO */
+    MEDIA_FORMAT_AMR = (MEDIA_FORMAT_AUDIO | MEDIA_FORMAT_ENCODED | 0x1040),           /**< media format mime type is AMR,  AUDIO,  indicates MEDIA_FORMAT_AMR_NB (Since tizen 2.4) */
+    MEDIA_FORMAT_AMR_NB = (MEDIA_FORMAT_AUDIO | MEDIA_FORMAT_ENCODED | 0x1040),        /**< media format mime type is AMR_NB,  AUDIO , (Since tizen 2.4) */
+    MEDIA_FORMAT_AMR_WB = (MEDIA_FORMAT_AUDIO | MEDIA_FORMAT_ENCODED | 0x1041),        /**< media format mime type is AMR_WB,  AUDIO, (Since tizen 2.4) */
     MEDIA_FORMAT_G729 = (MEDIA_FORMAT_AUDIO | MEDIA_FORMAT_ENCODED | 0x1050),          /**< media format mime type is G729,  AUDIO*/
-    MEDIA_FORMAT_AAC = (MEDIA_FORMAT_AUDIO | MEDIA_FORMAT_ENCODED | 0x1060),          /**< media format mime type is AAC,  AUDIO*/
-    MEDIA_FORMAT_MP3 = (MEDIA_FORMAT_AUDIO | MEDIA_FORMAT_ENCODED | 0x1070),          /**< media format mime type is MP3,  AUDIO*/
+    MEDIA_FORMAT_AAC = (MEDIA_FORMAT_AUDIO | MEDIA_FORMAT_ENCODED | 0x1060),           /**< media format mime type is AAC,  AUDIO, indicates MEDIA_FORMAT_AAC_LC (Since tizen 2.4) */
+    MEDIA_FORMAT_AAC_LC = (MEDIA_FORMAT_AUDIO | MEDIA_FORMAT_ENCODED | 0x1060),        /**< media format mime type is AAC_LC,  AUDIO, (Since tizen 2.4) */
+    MEDIA_FORMAT_AAC_HE = (MEDIA_FORMAT_AUDIO | MEDIA_FORMAT_ENCODED | 0x1061),        /**< media format mime type is AAC_HE,  AUDIO, (Since tizen 2.4) */
+    MEDIA_FORMAT_AAC_HE_PS = (MEDIA_FORMAT_AUDIO | MEDIA_FORMAT_ENCODED | 0x1062),     /**< media format mime type is AAC_HE_PS,  AUDIO, (Since tizen 2.4) */
+    MEDIA_FORMAT_MP3 = (MEDIA_FORMAT_AUDIO | MEDIA_FORMAT_ENCODED | 0x1070),           /**< media format mime type is MP3,  AUDIO*/
+    MEDIA_FORMAT_VORBIS = (MEDIA_FORMAT_AUDIO | MEDIA_FORMAT_ENCODED | 0x1080),        /**< media format mime type is VORBIS,  AUDIO, (Since tizen 2.4) */
+    MEDIA_FORMAT_FLAC = (MEDIA_FORMAT_AUDIO | MEDIA_FORMAT_ENCODED | 0x1090),          /**< media format mime type is FLAC,  AUDIO, (Since tizen 2.4) */
+    MEDIA_FORMAT_WMAV1 = (MEDIA_FORMAT_AUDIO | MEDIA_FORMAT_ENCODED | 0x10A0),         /**< media format mime type is WMAV1,  AUDIO, (Since tizen 2.4) */
+    MEDIA_FORMAT_WMAV2 = (MEDIA_FORMAT_AUDIO | MEDIA_FORMAT_ENCODED | 0x10A1),         /**< media format mime type is WMAV2,  AUDIO, (Since tizen 2.4) */
+    MEDIA_FORMAT_WMAPRO = (MEDIA_FORMAT_AUDIO | MEDIA_FORMAT_ENCODED | 0x10A2),        /**< media format mime type is WMAVPRO,  AUDIO, (Since tizen 2.4) */
+    MEDIA_FORMAT_WMALSL = (MEDIA_FORMAT_AUDIO | MEDIA_FORMAT_ENCODED | 0x10A3),        /**< media format mime type is WMAVLSL,  AUDIO, (Since tizen 2.4) */
 
-    MEDIA_FORMAT_PCM = (MEDIA_FORMAT_AUDIO | MEDIA_FORMAT_RAW | 0x1510),          /**< media format mime type is PCM, AUDIO*/
-    MEDIA_FORMAT_PCMA = (MEDIA_FORMAT_AUDIO | MEDIA_FORMAT_RAW | 0x1520),          /**< media format mime type is PCM A-law, AUDIO*/
-    MEDIA_FORMAT_PCMU = (MEDIA_FORMAT_AUDIO | MEDIA_FORMAT_RAW | 0x1530),          /**< media format mime type is PCM U-law, AUDIO */
+    MEDIA_FORMAT_PCM = (MEDIA_FORMAT_AUDIO | MEDIA_FORMAT_RAW | 0x1510),               /**< media format mime type is PCM, AUDIO*/
+    MEDIA_FORMAT_PCMA = (MEDIA_FORMAT_AUDIO | MEDIA_FORMAT_RAW | 0x1520),              /**< media format mime type is PCM A-law, AUDIO*/
+    MEDIA_FORMAT_PCMU = (MEDIA_FORMAT_AUDIO | MEDIA_FORMAT_RAW | 0x1530),              /**< media format mime type is PCM U-law, AUDIO */
 
     /* Video */
     MEDIA_FORMAT_H261 = (MEDIA_FORMAT_VIDEO | MEDIA_FORMAT_ENCODED | 0x2010),          /**< media format mime type is H261, VIDEO */
     MEDIA_FORMAT_H263 = (MEDIA_FORMAT_VIDEO | MEDIA_FORMAT_ENCODED | 0x2020),          /**< media format mime type is H263, VIDEO */
-    MEDIA_FORMAT_H263P = (MEDIA_FORMAT_VIDEO | MEDIA_FORMAT_ENCODED | 0x2021),          /**< media format mime type is H263P, VIDEO */
-    MEDIA_FORMAT_H264_SP = (MEDIA_FORMAT_VIDEO | MEDIA_FORMAT_ENCODED | 0x2030),          /**< media format mime type is H264_SP, VIDEO */
-    MEDIA_FORMAT_H264_MP = (MEDIA_FORMAT_VIDEO | MEDIA_FORMAT_ENCODED | 0x2031),          /**< media format mime type is H264_MP, VIDEO */
-    MEDIA_FORMAT_H264_HP = (MEDIA_FORMAT_VIDEO | MEDIA_FORMAT_ENCODED | 0x2032),          /**< media format mime type is H264_HP, VIDEO */
-    MEDIA_FORMAT_MJPEG = (MEDIA_FORMAT_VIDEO | MEDIA_FORMAT_ENCODED | 0x2040),          /**< media format mime type is MJPEG, VIDEO */
-    MEDIA_FORMAT_MPEG1 = (MEDIA_FORMAT_VIDEO | MEDIA_FORMAT_ENCODED | 0x2050),          /**< media format mime type is MPEG1, VIDEO */
-    MEDIA_FORMAT_MPEG2_SP = (MEDIA_FORMAT_VIDEO | MEDIA_FORMAT_ENCODED | 0x2060),          /**< media format mime type is MPEG2_SP, VIDEO */
-    MEDIA_FORMAT_MPEG2_MP = (MEDIA_FORMAT_VIDEO | MEDIA_FORMAT_ENCODED | 0x2061),          /**< media format mime type is MPEG2_MP, VIDEO */
-    MEDIA_FORMAT_MPEG2_HP = (MEDIA_FORMAT_VIDEO | MEDIA_FORMAT_ENCODED | 0x2062),          /**< media format mime type is MPEG2_HP, VIDEO */
-    MEDIA_FORMAT_MPEG4_SP = (MEDIA_FORMAT_VIDEO | MEDIA_FORMAT_ENCODED | 0x2070),          /**< media format mime type is MPEG4_SP, VIDEO */
-    MEDIA_FORMAT_MPEG4_ASP = (MEDIA_FORMAT_VIDEO | MEDIA_FORMAT_ENCODED | 0x2071),          /**< media format mime type is MPEG4_ASP, VIDEO */
+    MEDIA_FORMAT_H263P = (MEDIA_FORMAT_VIDEO | MEDIA_FORMAT_ENCODED | 0x2021),         /**< media format mime type is H263P, VIDEO */
+    MEDIA_FORMAT_H264_SP = (MEDIA_FORMAT_VIDEO | MEDIA_FORMAT_ENCODED | 0x2030),       /**< media format mime type is H264_SP, VIDEO */
+    MEDIA_FORMAT_H264_MP = (MEDIA_FORMAT_VIDEO | MEDIA_FORMAT_ENCODED | 0x2031),       /**< media format mime type is H264_MP, VIDEO */
+    MEDIA_FORMAT_H264_HP = (MEDIA_FORMAT_VIDEO | MEDIA_FORMAT_ENCODED | 0x2032),       /**< media format mime type is H264_HP, VIDEO */
+    MEDIA_FORMAT_MJPEG = (MEDIA_FORMAT_VIDEO | MEDIA_FORMAT_ENCODED | 0x2040),         /**< media format mime type is MJPEG, VIDEO */
+    MEDIA_FORMAT_MPEG1 = (MEDIA_FORMAT_VIDEO | MEDIA_FORMAT_ENCODED | 0x2050),         /**< media format mime type is MPEG1, VIDEO */
+    MEDIA_FORMAT_MPEG2_SP = (MEDIA_FORMAT_VIDEO | MEDIA_FORMAT_ENCODED | 0x2060),      /**< media format mime type is MPEG2_SP, VIDEO */
+    MEDIA_FORMAT_MPEG2_MP = (MEDIA_FORMAT_VIDEO | MEDIA_FORMAT_ENCODED | 0x2061),      /**< media format mime type is MPEG2_MP, VIDEO */
+    MEDIA_FORMAT_MPEG2_HP = (MEDIA_FORMAT_VIDEO | MEDIA_FORMAT_ENCODED | 0x2062),      /**< media format mime type is MPEG2_HP, VIDEO */
+    MEDIA_FORMAT_MPEG4_SP = (MEDIA_FORMAT_VIDEO | MEDIA_FORMAT_ENCODED | 0x2070),      /**< media format mime type is MPEG4_SP, VIDEO */
+    MEDIA_FORMAT_MPEG4_ASP = (MEDIA_FORMAT_VIDEO | MEDIA_FORMAT_ENCODED | 0x2071),     /**< media format mime type is MPEG4_ASP, VIDEO */
+    MEDIA_FORMAT_HEVC = (MEDIA_FORMAT_VIDEO | MEDIA_FORMAT_ENCODED | 0x2080),          /**< media format mime type is HEVC, VIDEO, (Since tizen 2.4) */
+    MEDIA_FORMAT_VP8 = (MEDIA_FORMAT_VIDEO | MEDIA_FORMAT_ENCODED | 0x2090),           /**< media format mime type is VP8, VIDEO, (Since tizen 2.4) */
+    MEDIA_FORMAT_VP9 = (MEDIA_FORMAT_VIDEO | MEDIA_FORMAT_ENCODED | 0x20A0),           /**< media format mime type is VP9, VIDEO, (Since tizen 2.4) */
+    MEDIA_FORMAT_VC1 = (MEDIA_FORMAT_VIDEO | MEDIA_FORMAT_ENCODED | 0x20B0),           /**< media format mime type is VC1, VIDEO, (Since tizen 2.4) */
 
-    MEDIA_FORMAT_I420 = (MEDIA_FORMAT_VIDEO | MEDIA_FORMAT_RAW | 0x2510),          /**< media format mime type is I420, VIDEO */
-    MEDIA_FORMAT_NV12 = (MEDIA_FORMAT_VIDEO | MEDIA_FORMAT_RAW | 0x2520),          /**< media format mime type is NV12, VIDEO */
-    MEDIA_FORMAT_NV12T = (MEDIA_FORMAT_VIDEO | MEDIA_FORMAT_RAW | 0x2530),          /**< media format mime type is NV12T, VIDEO */
-    MEDIA_FORMAT_YV12 = (MEDIA_FORMAT_VIDEO | MEDIA_FORMAT_RAW | 0x2540),          /**< media format mime type is YV12, VIDEO */
-    MEDIA_FORMAT_NV21 = (MEDIA_FORMAT_VIDEO | MEDIA_FORMAT_RAW | 0x2550),          /**< media format mime type is NV21, VIDEO */
-    MEDIA_FORMAT_NV16 = (MEDIA_FORMAT_VIDEO | MEDIA_FORMAT_RAW | 0x2560),          /**< media format mime type is NV16, VIDEO */
-    MEDIA_FORMAT_YUYV = (MEDIA_FORMAT_VIDEO | MEDIA_FORMAT_RAW | 0x2570),          /**< media format mime type is YUYV, VIDEO */
-    MEDIA_FORMAT_UYVY = (MEDIA_FORMAT_VIDEO | MEDIA_FORMAT_RAW | 0x2580),          /**< media format mime type is UYVY, VIDEO */
-    MEDIA_FORMAT_422P = (MEDIA_FORMAT_VIDEO | MEDIA_FORMAT_RAW | 0x2590),          /**< media format mime type is 422P, VIDEO */
-    MEDIA_FORMAT_RGB565 = (MEDIA_FORMAT_VIDEO | MEDIA_FORMAT_RAW | 0x25a0),          /**< media format mime type is RGB565, VIDEO */
-    MEDIA_FORMAT_RGB888 = (MEDIA_FORMAT_VIDEO | MEDIA_FORMAT_RAW | 0x25b0),          /**< media format mime type is RGB888, VIDEO */
-    MEDIA_FORMAT_RGBA = (MEDIA_FORMAT_VIDEO | MEDIA_FORMAT_RAW | 0x25c0),          /**< media format mime type is RGBA, VIDEO */
-    MEDIA_FORMAT_ARGB = (MEDIA_FORMAT_VIDEO | MEDIA_FORMAT_RAW | 0x25d0),          /**< media format mime type is ARGB, VIDEO */
+    MEDIA_FORMAT_I420 = (MEDIA_FORMAT_VIDEO | MEDIA_FORMAT_RAW | 0x2510),              /**< media format mime type is I420, VIDEO */
+    MEDIA_FORMAT_NV12 = (MEDIA_FORMAT_VIDEO | MEDIA_FORMAT_RAW | 0x2520),              /**< media format mime type is NV12, VIDEO */
+    MEDIA_FORMAT_NV12T = (MEDIA_FORMAT_VIDEO | MEDIA_FORMAT_RAW | 0x2530),             /**< media format mime type is NV12T, VIDEO */
+    MEDIA_FORMAT_YV12 = (MEDIA_FORMAT_VIDEO | MEDIA_FORMAT_RAW | 0x2540),              /**< media format mime type is YV12, VIDEO */
+    MEDIA_FORMAT_NV21 = (MEDIA_FORMAT_VIDEO | MEDIA_FORMAT_RAW | 0x2550),              /**< media format mime type is NV21, VIDEO */
+    MEDIA_FORMAT_NV16 = (MEDIA_FORMAT_VIDEO | MEDIA_FORMAT_RAW | 0x2560),              /**< media format mime type is NV16, VIDEO */
+    MEDIA_FORMAT_YUYV = (MEDIA_FORMAT_VIDEO | MEDIA_FORMAT_RAW | 0x2570),              /**< media format mime type is YUYV, VIDEO */
+    MEDIA_FORMAT_UYVY = (MEDIA_FORMAT_VIDEO | MEDIA_FORMAT_RAW | 0x2580),              /**< media format mime type is UYVY, VIDEO */
+    MEDIA_FORMAT_422P = (MEDIA_FORMAT_VIDEO | MEDIA_FORMAT_RAW | 0x2590),              /**< media format mime type is 422P, VIDEO */
+    MEDIA_FORMAT_RGB565 = (MEDIA_FORMAT_VIDEO | MEDIA_FORMAT_RAW | 0x25a0),            /**< media format mime type is RGB565, VIDEO */
+    MEDIA_FORMAT_RGB888 = (MEDIA_FORMAT_VIDEO | MEDIA_FORMAT_RAW | 0x25b0),            /**< media format mime type is RGB888, VIDEO */
+    MEDIA_FORMAT_RGBA = (MEDIA_FORMAT_VIDEO | MEDIA_FORMAT_RAW | 0x25c0),              /**< media format mime type is RGBA, VIDEO */
+    MEDIA_FORMAT_ARGB = (MEDIA_FORMAT_VIDEO | MEDIA_FORMAT_RAW | 0x25d0),              /**< media format mime type is ARGB, VIDEO */
+
+    MEDIA_FORMAT_NATIVE_VIDEO = (MEDIA_FORMAT_VIDEO | MEDIA_FORMAT_RAW | 0x3000),      /**< media format mime type is HW dependent , VIDEO, (Since tizen 2.4) */
 
     MEDIA_FORMAT_MAX          /**< media format mime type is MEDIA_FORMAT_MAX, Do not use */
 } media_format_mimetype_e;
 
 /**
  * @brief Enumeration for media color model.
- * @since_tizen @if MOBILE 2.3 @elseif WEARABLE 2.3.1 @endif
+ * @since_tizen 2.3
  */
 typedef enum {
     MEDIA_COLOR_MODEL_NONE,          /**< media format color model is NONE */
@@ -144,10 +162,13 @@ typedef enum {
 
 /**
  * @brief Creates a media format
- * @since_tizen @if MOBILE 2.3 @elseif WEARABLE 2.3.1 @endif
+ * @since_tizen 2.3
  * @details    It creates media format. and reference count will be set to 1
                     For destroying media_format_h handle, use media_format_unref()
  * @param[out] fmt allocated media_format_h
+ *
+ * @return @c 0 on success,
+ *         otherwise a negative error value
  * @retval #MEDIA_FORMAT_ERROR_NONE Successful
  * @retval #MEDIA_FORMAT_ERROR_INVALID_PARAMETER Invalid parameter
  * @retval #MEDIA_FORMAT_ERROR_OUT_OF_MEMORY Out of memory
@@ -159,7 +180,7 @@ int media_format_create(media_format_h* fmt);
 
 /**
  * @brief Gets video information of media format
- * @since_tizen @if MOBILE 2.3 @elseif WEARABLE 2.3.1 @endif
+ * @since_tizen 2.3
  * @details   returns mimetype, width, height, average bps, max bps of this media format
  * @param[in] fmt media_format_h to get video information
  * @param[out] mimetype media_format_mimetype_e , ex) MEDIA_FORMAT_H264_HP
@@ -167,6 +188,9 @@ int media_format_create(media_format_h* fmt);
  * @param[out] height height of the video
  * @param[out] avg_bps average bps of the video
  * @param[out] max_bps max bps of the video
+ *
+ * @return @c 0 on success,
+ *         otherwise a negative error value
  * @retval #MEDIA_FORMAT_ERROR_NONE Successful
  * @retval #MEDIA_FORMAT_ERROR_INVALID_PARAMETER Invalid parameter
  * @retval #MEDIA_FORMAT_ERROR_INVALID_OPERATION Invalid operation
@@ -180,7 +204,7 @@ int media_format_get_video_info(media_format_h fmt, media_format_mimetype_e* mim
 
 /**
  * @brief Gets audio information of media format
- * @since_tizen @if MOBILE 2.3 @elseif WEARABLE 2.3.1 @endif
+ * @since_tizen 2.3
  * @details   returns mimetype, channels, height, samplerate bps, max bps of this media format
  * @param[in] fmt media_format_h to get audio information
  * @param[out] mimetype media_format_mimetype_e , ex) MEDIA_FORMAT_PCM
@@ -188,6 +212,9 @@ int media_format_get_video_info(media_format_h fmt, media_format_mimetype_e* mim
  * @param[out] samplerate sampling rate of the audio
  * @param[out] bit bit resolution of the audio
  * @param[out] avg_bps average bps of the audio
+ *
+ * @return @c 0 on success,
+ *         otherwise a negative error value
  * @retval #MEDIA_FORMAT_ERROR_NONE Successful
  * @retval #MEDIA_FORMAT_ERROR_INVALID_PARAMETER Invalid parameter
  * @retval #MEDIA_FORMAT_ERROR_INVALID_OPERATION Invalid operation
@@ -200,11 +227,29 @@ int media_format_get_video_info(media_format_h fmt, media_format_mimetype_e* mim
 int media_format_get_audio_info(media_format_h fmt, media_format_mimetype_e* mimetype, int* channel, int* samplerate, int* bit, int* avg_bps);
 
 /**
+ * @brief Gets audio aac type of media format
+ * @since_tizen 2.4
+ * @param[in] fmt media_format_h to get audio information
+ * @param[out] is_adts aac adts flag of the audio
+ *
+ * @return @c 0 on success,
+ *         otherwise a negative error value
+ * @retval #MEDIA_FORMAT_ERROR_NONE Successful
+ * @retval #MEDIA_FORMAT_ERROR_INVALID_PARAMETER Invalid parameter
+ * @retval #MEDIA_FORMAT_ERROR_INVALID_OPERATION Invalid operation
+ * @see media_format_set_audio_aac_type()
+ */
+int media_format_get_audio_aac_type(media_format_h fmt, bool* is_adts);
+
+/**
  * @brief Sets video MIME type of media format
- * @since_tizen @if MOBILE 2.3 @elseif WEARABLE 2.3.1 @endif
+ * @since_tizen 2.3
  * @details   Sets MIME type
  * @param[in] fmt media_format_h to set
  * @param[in] mimetype media_format_mimetype_e , ex) MEDIA_FORMAT_H264_HP
+ *
+ * @return @c 0 on success,
+ *         otherwise a negative error value
  * @retval #MEDIA_FORMAT_ERROR_NONE Successful
  * @retval #MEDIA_FORMAT_ERROR_INVALID_PARAMETER Invalid parameter
  * @retval #MEDIA_FORMAT_ERROR_INVALID_OPERATION Invalid operation
@@ -214,11 +259,14 @@ int media_format_set_video_mime(media_format_h fmt, media_format_mimetype_e mime
 
 /**
  * @brief Sets video width of media format
- * @since_tizen @if MOBILE 2.3 @elseif WEARABLE 2.3.1 @endif
+ * @since_tizen 2.3
  * @details   Sets video width
  * @param[in] fmt media_format_h to set
  * @param[in] width width of the video
  * @pre must set video MIME type by media_format_set_video_mime()
+ *
+ * @return @c 0 on success,
+ *         otherwise a negative error value
  * @retval #MEDIA_FORMAT_ERROR_NONE Successful
  * @retval #MEDIA_FORMAT_ERROR_INVALID_PARAMETER Invalid parameter
  * @retval #MEDIA_FORMAT_ERROR_INVALID_OPERATION Invalid operation
@@ -229,11 +277,14 @@ int media_format_set_video_width(media_format_h fmt, int width);
 
 /**
  * @brief Sets video height of media format
- * @since_tizen @if MOBILE 2.3 @elseif WEARABLE 2.3.1 @endif
+ * @since_tizen 2.3
  * @details   Sets video height
  * @param[in] fmt media_format_h to set
  * @param[in] height height of the video
  * @pre must set video MIME type by media_format_set_video_mime()
+ *
+ * @return @c 0 on success,
+ *         otherwise a negative error value
  * @retval #MEDIA_FORMAT_ERROR_NONE Successful
  * @retval #MEDIA_FORMAT_ERROR_INVALID_PARAMETER Invalid parameter
  * @retval #MEDIA_FORMAT_ERROR_INVALID_OPERATION Invalid operation
@@ -243,11 +294,14 @@ int media_format_set_video_height(media_format_h fmt, int height);
 
 /**
  * @brief Sets video avg_bps of media format
- * @since_tizen @if MOBILE 2.3 @elseif WEARABLE 2.3.1 @endif
+ * @since_tizen 2.3
  * @details   Sets avg_bps
  * @param[in] fmt media_format_h to set
  * @param[in] avg_bps average bps of the video
  * @pre must set video MIME type by media_format_set_video_mime()
+ *
+ * @return @c 0 on success,
+ *         otherwise a negative error value
  * @retval #MEDIA_FORMAT_ERROR_NONE Successful
  * @retval #MEDIA_FORMAT_ERROR_INVALID_PARAMETER Invalid parameter
  * @retval #MEDIA_FORMAT_ERROR_INVALID_OPERATION Invalid operation
@@ -257,11 +311,14 @@ int media_format_set_video_avg_bps(media_format_h fmt, int avg_bps);
 
 /**
  * @brief Sets video max_bps of media format
- * @since_tizen @if MOBILE 2.3 @elseif WEARABLE 2.3.1 @endif
+ * @since_tizen 2.3
  * @details   Sets max_bps
  * @param[in] fmt media_format_h to set
  * @param[in] max_bps max bps of the video
  * @pre must set video MIME type by media_format_set_video_mime()
+ *
+ * @return @c 0 on success,
+ *         otherwise a negative error value
  * @retval #MEDIA_FORMAT_ERROR_NONE Successful
  * @retval #MEDIA_FORMAT_ERROR_INVALID_PARAMETER Invalid parameter
  * @retval #MEDIA_FORMAT_ERROR_INVALID_OPERATION Invalid operation
@@ -271,10 +328,13 @@ int media_format_set_video_max_bps(media_format_h fmt, int max_bps);
 
 /**
  * @brief Sets audio MIME type of media format
- * @since_tizen @if MOBILE 2.3 @elseif WEARABLE 2.3.1 @endif
+ * @since_tizen 2.3
  * @details   Sets MIME type
  * @param[in] fmt media_format_h to set audio information
  * @param[in] mimetype media_format_mimetype_e , ex) MEDIA_FORMAT_PCM
+ *
+ * @return @c 0 on success,
+ *         otherwise a negative error value
  * @retval #MEDIA_FORMAT_ERROR_NONE Successful
  * @retval #MEDIA_FORMAT_ERROR_INVALID_PARAMETER Invalid parameter
  * @retval #MEDIA_FORMAT_ERROR_INVALID_OPERATION Invalid operation
@@ -284,11 +344,14 @@ int media_format_set_audio_mime(media_format_h fmt, media_format_mimetype_e mime
 
 /**
  * @brief Sets audio channel of media format
- * @since_tizen @if MOBILE 2.3 @elseif WEARABLE 2.3.1 @endif
+ * @since_tizen 2.3
  * @details   Sets audio channel
  * @param[in] fmt media_format_h to set audio information
  * @param[in] channel channel of the audio
  * @pre must set audio MIME type by media_format_set_audio_mime()
+ *
+ * @return @c 0 on success,
+ *         otherwise a negative error value
  * @retval #MEDIA_FORMAT_ERROR_NONE Successful
  * @retval #MEDIA_FORMAT_ERROR_INVALID_PARAMETER Invalid parameter
  * @retval #MEDIA_FORMAT_ERROR_INVALID_OPERATION Invalid operation
@@ -298,11 +361,14 @@ int media_format_set_audio_channel(media_format_h fmt, int channel);
 
 /**
  * @brief Sets audio samplerate of media format
- * @since_tizen @if MOBILE 2.3 @elseif WEARABLE 2.3.1 @endif
+ * @since_tizen 2.3
  * @details   Sets audio samplerate of this media format
  * @param[in] fmt media_format_h to set
  * @param[in] samplerate sampling rate of the audio
  * @pre must set audio MIME type by media_format_set_audio_mime()
+ *
+ * @return @c 0 on success,
+ *         otherwise a negative error value
  * @retval #MEDIA_FORMAT_ERROR_NONE Successful
  * @retval #MEDIA_FORMAT_ERROR_INVALID_PARAMETER Invalid parameter
  * @retval #MEDIA_FORMAT_ERROR_INVALID_OPERATION Invalid operation
@@ -312,11 +378,14 @@ int media_format_set_audio_samplerate(media_format_h fmt, int samplerate);
 
  /**
  * @brief Sets audio bit of media format
- * @since_tizen @if MOBILE 2.3 @elseif WEARABLE 2.3.1 @endif
+ * @since_tizen 2.3
  * @details   Sets audio bit resolution of this media format
  * @param[in] fmt media_format_h to set
  * @param[in] bit bit of the audio
  * @pre must set audio MIME type by media_format_set_audio_mime()
+ *
+ * @return @c 0 on success,
+ *         otherwise a negative error value
  * @retval #MEDIA_FORMAT_ERROR_NONE Successful
  * @retval #MEDIA_FORMAT_ERROR_INVALID_PARAMETER Invalid parameter
  * @retval #MEDIA_FORMAT_ERROR_INVALID_OPERATION Invalid operation
@@ -326,11 +395,14 @@ int media_format_set_audio_bit(media_format_h fmt, int bit);
 
  /**
  * @brief Sets audio avg_bps of media format
- * @since_tizen @if MOBILE 2.3 @elseif WEARABLE 2.3.1 @endif
+ * @since_tizen 2.3
  * @details   Sets audio avg_bps of this media format
  * @param[in] fmt media_format_h to set
  * @param[in] avg_bps avg_bps of the audio
  * @pre must set audio MIME type by media_format_set_audio_mime()
+ *
+ * @return @c 0 on success,
+ *         otherwise a negative error value
  * @retval #MEDIA_FORMAT_ERROR_NONE Successful
  * @retval #MEDIA_FORMAT_ERROR_INVALID_PARAMETER Invalid parameter
  * @retval #MEDIA_FORMAT_ERROR_INVALID_OPERATION Invalid operation
@@ -338,11 +410,31 @@ int media_format_set_audio_bit(media_format_h fmt, int bit);
  */
 int media_format_set_audio_avg_bps(media_format_h fmt, int avg_bps);
 
+ /**
+ * @brief Sets audio aac type of media format
+ * @since_tizen 2.4
+ * @details   Sets audio aac data type of this media format
+ * @param[in] fmt media_format_h to set
+ * @param[in] is_adts aac adts flag of the audio
+ * @pre must set audio MIME type by media_format_set_audio_mime()
+ *
+ * @return @c 0 on success,
+ *         otherwise a negative error value
+ * @retval #MEDIA_FORMAT_ERROR_NONE Successful
+ * @retval #MEDIA_FORMAT_ERROR_INVALID_PARAMETER Invalid parameter
+ * @retval #MEDIA_FORMAT_ERROR_INVALID_OPERATION Invalid operation
+ * @see media_format_get_audio_aac_type()
+ */
+int media_format_set_audio_aac_type(media_format_h fmt, bool is_adts);
+
 /**
  * @brief Increase reference count of media_format_h object
- * @since_tizen @if MOBILE 2.3 @elseif WEARABLE 2.3.1 @endif
+ * @since_tizen 2.3
  * @details    increase ref_count of media_format_h
  * @param[in] fmt exist media_format_h
+ *
+ * @return @c 0 on success,
+ *         otherwise a negative error value
  * @retval #MEDIA_FORMAT_ERROR_NONE Successful
  * @retval #MEDIA_FORMAT_ERROR_INVALID_PARAMETER Invalid parameter
  * @retval #MEDIA_FORMAT_ERROR_OUT_OF_MEMORY Out of memory
@@ -353,9 +445,12 @@ int media_format_ref(media_format_h fmt);
 
 /**
  * @brief Decrease reference count of media_format_h object
- * @since_tizen @if MOBILE 2.3 @elseif WEARABLE 2.3.1 @endif
+ * @since_tizen 2.3
  * @details    decrease ref_count of media_format_h
  * @param[in] fmt exist media_format_h
+ *
+ * @return @c 0 on success,
+ *         otherwise a negative error value
  * @retval #MEDIA_FORMAT_ERROR_NONE Successful
  * @retval #MEDIA_FORMAT_ERROR_INVALID_PARAMETER Invalid parameter
  * @retval #MEDIA_FORMAT_ERROR_OUT_OF_MEMORY Out of memory
@@ -366,10 +461,13 @@ int media_format_unref(media_format_h fmt);
 
 /**
  * @brief Check whether the media_format_h is writable or not.
- * @since_tizen @if MOBILE 2.3 @elseif WEARABLE 2.3.1 @endif
+ * @since_tizen 2.3
  * @details    Check the number of media_format's ref_count
  * @param[in] fmt exist media_format_h
  * @param[out] is_writable if ref_count is 1, return true. if not, return false
+ *
+ * @return @c 0 on success,
+ *         otherwise a negative error value
  * @retval #MEDIA_FORMAT_ERROR_NONE Successful
  * @retval #MEDIA_FORMAT_ERROR_INVALID_PARAMETER Invalid parameter
  * @retval #MEDIA_FORMAT_ERROR_OUT_OF_MEMORY Out of memory
@@ -379,15 +477,18 @@ int media_format_is_writable(media_format_h fmt, bool* is_writable);
 
  /**
  * @brief Returns a writable copy of media_format_h
- * @since_tizen @if MOBILE 2.3 @elseif WEARABLE 2.3.1 @endif
+ * @since_tizen 2.3
  * @details If there is only one reference count on fmt, the caller must be the owner,
  *              and so this function will return the object unchanged.
  *              while, if there is more than one reference count on the object, a new object will be returned.
  *              The caller will own a reference to the returned object.
  *              In a nutshell, this function unrefs the fmt and refs the out_fmt returned.
  *              Don't access fmt after calling this function.
- * @param[in] fmt exist media_format_h , don't access it after calling this function.
- * @param[out] out_fmt new copied media_format_h, the caller is owner of this object.
+ * @param[in] fmt exist media_format_h , don't access it after calling this function
+ * @param[out] out_fmt new copied media_format_h, the caller is owner of this object
+ *
+ * @return @c 0 on success,
+ *         otherwise a negative error value
  * @retval #MEDIA_FORMAT_ERROR_NONE Successful
  * @retval #MEDIA_FORMAT_ERROR_INVALID_PARAMETER Invalid parameter
  * @retval #MEDIA_FORMAT_ERROR_OUT_OF_MEMORY Out of memory
